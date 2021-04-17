@@ -75,6 +75,10 @@ function control() {
         console.log('Down Arrow key has been pressed');
         switchPosition(e.key);
         break;
+    };
+    var result = checkResult();
+    if (result == true) {
+      alert('You win!');
     }
   }
 }
@@ -115,9 +119,28 @@ function switchPosition(key) {
     var x = document.querySelector(objectID).src;
     document.querySelector(objectID).src = document.querySelector(blankObjectID).src;
     document.querySelector(blankObjectID).src = x;
+    // Cập nhật lại mảng random puzzles
+    updateRandomPuzzles(objectPosition);
     // Cập nhật lại vị trí của blank
     blankPosition = objectPosition;
   }
+}
+
+function checkResult() {
+  for (let x = 0; x < MAX_ROW; x++) {
+    for (let y = 0; y < MAX_COL; y++) {
+      if (puzzles[x][y] != randomPuzzles[x][y]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+function updateRandomPuzzles(objectPosition) {
+  var x = randomPuzzles[objectPosition.row][objectPosition.col];
+  randomPuzzles[blankPosition.row][blankPosition.col] = x;
+  randomPuzzles[objectPosition.row][objectPosition.col] = 1;
 }
 
 function gameStart() {
